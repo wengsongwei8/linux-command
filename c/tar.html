@@ -10,7 +10,7 @@
     <meta name="keywords" content="Linux,Command,命令大全,Linux命令手册,tar,Linux下的归档使用工具，用来打包和备份">
     <title>tar 命令，Linux tar 命令详解：Linux下的归档使用工具，用来打包和备份 -  Linux 命令搜索引擎</title>
     <link rel="shortcut icon" href="../img/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../css/index.css?v=1561111334581">
+    <link rel="stylesheet" type="text/css" href="../css/index.css?v=1561363502224">
 </head>
 <body>
 <a href="https://github.com/jaywcjlove/linux-command" target="_blank" class="github-corner"> <svg viewBox="0 0 250 250"><!-- kenny wang <wowohoo@qq.com> https://github.com/jaywcjlove --> <title>logo</title> <desc>Linux Command Logo. https://github.com/jaywcjlove</desc><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg> </a>
@@ -44,30 +44,32 @@
 <h2 id="补充说明">补充说明</h2><p><strong>tar命令</strong> 可以为linux的文件和目录创建档案。利用tar，可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。tar最初被用来在磁带上创建档案，现在，用户可以在任何设备上创建档案。利用tar命令，可以把一大堆的文件和目录全部打包成一个文件，这对于备份文件或将几个文件组合成为一个文件以便于网络传输是非常有用的。</p>
 <p>首先要弄清两个概念：打包和压缩。打包是指将一大堆文件或目录变成一个总的文件；压缩则是将一个大的文件通过一些压缩算法变成一个小文件。</p>
 <p>为什么要区分这两个概念呢？这源于Linux中很多压缩程序只能针对一个文件进行压缩，这样当你想要压缩一大堆文件时，你得先将这一大堆文件先打成一个包（tar命令），然后再用压缩程序进行压缩（gzip bzip2命令）。</p>
-<h3 id="语法">语法</h3><pre><code class="language-shell">tar<span class="token punctuation">(</span>选项<span class="token punctuation">)</span><span class="token punctuation">(</span>参数<span class="token punctuation">)</span></code></pre>
+<h3 id="语法">语法</h3><pre><code class="language-shell"><span class="token function">tar</span> <span class="token punctuation">(</span>选项<span class="token punctuation">)</span> <span class="token punctuation">(</span>参数<span class="token punctuation">)</span></code></pre>
 <h3 id="选项">选项</h3><pre><code class="language-shell">-A或--catenate：新增文件到以存在的备份文件；
 -B：设置区块大小；
 -c或--create：建立新的备份文件；
--C <span class="token operator">&lt;</span>目录<span class="token operator">></span>：这个选项用在解压缩，若要在特定目录解压缩，可以使用这个选项。
+-C <span class="token operator">&lt;</span>目录<span class="token operator">></span>：这个选项用在解压缩，若要在特定目录解压缩，可以使用这个选项；
 -d：记录文件的差别；
--x或--extract或--get：从备份文件中还原文件；
+-x或--extract或--get：从归档文件中提取文件，可以搭配-C（大写）在特定目录解开，
+                     需要注意的是-c、-t、-x不可同时出现在一串命令中；
 -t或--list：列出备份文件的内容；
--z或--gzip或--ungzip：通过gzip指令处理备份文件；
+-z或--gzip或--ungzip：通过gzip指令压缩/解压缩文件，文件名最好为*.tar.gz；
 -Z或--compress或--uncompress：通过compress指令处理备份文件；
 -f<span class="token operator">&lt;</span>备份文件<span class="token operator">></span>或--file<span class="token operator">=</span><span class="token operator">&lt;</span>备份文件<span class="token operator">></span>：指定备份文件；
 -v或--verbose：显示指令执行过程；
 -r：添加文件到已经压缩的文件；
 -u：添加改变了和现有的文件到已经存在的压缩文件；
--j：支持bzip2解压文件；
+-j：通过bzip2指令压缩/解压缩文件，文件名最好为*.tar.bz2；
 -v：显示操作过程；
 -l：文件系统边界设置；
 -k：保留原有文件不覆盖；
 -m：保留文件不被覆盖；
 -w：确认压缩文件的正确性；
--p或--same-permissions：用原来的文件权限还原文件；
--P或--absolute-names：文件名使用绝对名称，不移除文件名称前的“/”号；
+-p或--same-permissions：保留原来的文件权限与属性；
+-P或--absolute-names：使用文件名的绝对路径，不移除文件名称前的“/”号；
 -N <span class="token operator">&lt;</span>日期格式<span class="token operator">></span> 或 --newer<span class="token operator">=</span><span class="token operator">&lt;</span>日期时间<span class="token operator">></span>：只将较指定日期更新的文件保存到备份文件里；
---exclude<span class="token operator">=</span><span class="token operator">&lt;</span>范本样式<span class="token operator">></span>：排除符合范本样式的文件。</code></pre>
+--exclude<span class="token operator">=</span><span class="token operator">&lt;</span>范本样式<span class="token operator">></span>：排除符合范本样式的文件；
+--remove-files：归档/压缩之后删除源文件</code></pre>
 <h3 id="参数">参数</h3><p>文件或目录：指定要打包的文件或目录列表。</p>
 <h3 id="实例">实例</h3><pre><code class="language-shell">- z：有gzip属性的
 - j：有bz2属性的
@@ -138,6 +140,8 @@ Main-class: the_name_of_the_main_class_should_be_put_here</code></pre>
 <pre><code class="language-shell"><span class="token function">tar</span> -N <span class="token string">"2012/11/13"</span> -zcvf log17.tar.gz <span class="token function">test</span></code></pre>
 <p><strong>备份文件夹内容是排除部分文件：</strong></p>
 <pre><code class="language-shell"><span class="token function">tar</span> --exclude scf/service -zcvf scf.tar.gz scf/*</code></pre>
+<p><strong>打包文件之后删除源文件：</strong></p>
+<pre><code class="language-shell"><span class="token function">tar</span> -cvf test.tar <span class="token function">test</span> --remove-files</code></pre>
 <p><strong>其实最简单的使用 tar 就只要记忆底下的方式即可：</strong></p>
 <pre><code class="language-shell">压　缩：tar -jcv -f filename.tar.bz2 要被压缩的文件或目录名称
 查　询：tar -jtv -f filename.tar.bz2
@@ -165,7 +169,7 @@ Main-class: the_name_of_the_main_class_should_be_put_here</code></pre>
 </div>
 <script>
 var _hmt = _hmt || []; (function() {var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?a542c0213a9aa8ae29fccdc8a18b91ef"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
-<script type="text/javascript" src="../js/dt.js?v=1561111334582"></script>
-<script type="text/javascript" src="../js/index.js?v=1561111334582"></script>
+<script type="text/javascript" src="../js/dt.js?v=1561363502224"></script>
+<script type="text/javascript" src="../js/index.js?v=1561363502224"></script>
 </body>
 </html>
